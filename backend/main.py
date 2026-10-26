@@ -8,8 +8,7 @@ import traceback
 import math
 import sys
 from pathlib import Path
-sys.path.insert(0, 
-                str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
 # Import database module
 from database.database import (
     create_user,
