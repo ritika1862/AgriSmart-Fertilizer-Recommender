@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart | Fertilizer Optimization & Recommendation System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            🌱 Agri<span>Smart</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/recommend" class="nav-link">🌱 Recommender</a>
+            <a href="/cost-optimizer" class="nav-link">💰 Cost Optimizer</a>
+            <a href="/explainability" class="nav-link">🔍 Explainable AI</a>
+            <a href="/ai-assistant" class="nav-link">🤖 AI Assistant</a>
+            <a href="/marketplace" class="nav-link">🛒 Marketplace</a>
+            <a href="/soil-card" class="nav-link">📄 Soil Card</a>
+            <a href="/login" class="nav-link">Login</a>
+<a href="/signup" class="nav-link nav-btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                🚀 Data-Driven Agronomy • ML Decision Support
+            </div>
+            <h1>Intelligent Fertilizer Optimization for Maximum Crop Yield</h1>
+            <p>
+                Empowering farmers and agronomists with precise machine-learning recommendations.
+                Input your soil parameters, crop type, and field area to receive cost-effective dosage,
+                stage-wise application schedules, and cost savings analysis.
+            </p>
+            <div class="hero-actions">
+                <a href="#optimizer" class="btn btn-primary">🌱 Try Recommender Below</a>
+                <a href="/ai-assistant" class="btn btn-outline">🤖 Ask AI Farming Assistant</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= MAIN CALCULATOR SECTION ================= -->
+    <main class="container" id="optimizer">
+        
+        <!-- PRESETS BAR -->
+        <div class="preset-container">
+            <div class="preset-title">
+                ⚡ 1-Click Realistic Soil Test Presets (Click to Auto-Fill):
+            </div>
+            <div class="preset-chips" id="presetChips">
+                <!-- Dynamically populated via script.js -->
+                <button type="button" class="preset-chip">🌾 Loading Presets...</button>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            
+            <!-- INPUT CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        🧪 Soil & Crop Analysis Form
+                    </div>
+                    <span style="font-size:12px; color:#5e7364; font-weight:600;">Step 1 of 2</span>
+                </div>
+                <p class="card-desc">
+                    Enter your soil test metrics and field specifications. The model calculates the nutrient gap and recommends the optimal fertilizer.
+                </p>
+
+                <form id="recommendForm">
+                    <div class="form-grid">
+                        
+                        <!-- CROP -->
+                        <div class="form-group">
+                            <label for="crop">Select Crop <span class="unit">Required</span></label>
+                            <select id="crop" class="form-control" required>
+                                <option value="">-- Choose Crop --</option>
+                                <option value="Wheat" selected>Wheat (गेंहू)</option>
+                                <option value="Rice">Rice / Paddy (धान)</option>
+                                <option value="Maize">Maize (मक्का)</option>
+                                <option value="Cotton">Cotton (कपास)</option>
+                                <option value="Sugarcane">Sugarcane (गन्ना)</option>
+                                <option value="Potato">Potato (आलू)</option>
+                                <option value="Tomato">Tomato (टमाटर)</option>
+                                <option value="Soybean">Soybean (सोयाबीन)</option>
+                                <option value="Groundnut">Groundnut (मूंगफली)</option>
+                            </select>
+                        </div>
+
+                        <!-- SOIL TYPE -->
+                        <div class="form-group">
+                            <label for="soilType">Soil Type</label>
+                            <select id="soilType" class="form-control">
+                                <option value="Loamy" selected>Loamy (दोमट)</option>
+                                <option value="Clay">Clay (चिकनी)</option>
+                                <option value="Sandy">Sandy (बलुई)</option>
+                                <option value="Silt">Silt (गाद)</option>
+                                <option value="Black">Black Soil (काली मिट्टी)</option>
+                                <option value="Red">Red Soil (लाल मिट्टी)</option>
+                            </select>
+                        </div>
+
+                        <!-- NITROGEN -->
+                        <div class="form-group">
+                            <label for="nitrogen">Nitrogen (N) <span class="unit">kg/ha</span></label>
+                            <input type="number" id="nitrogen" class="form-control" value="50" min="0" max="300" step="0.1" required>
+                        </div>
+
+                        <!-- PHOSPHORUS -->
+                        <div class="form-group">
+                            <label for="phosphorus">Phosphorus (P) <span class="unit">kg/ha</span></label>
+                            <input type="number" id="phosphorus" class="form-control" value="45" min="0" max="300" step="0.1" required>
+                        </div>
+
+                        <!-- POTASSIUM -->
+                        <div class="form-group">
+                            <label for="potassium">Potassium (K) <span class="unit">kg/ha</span></label>
+                            <input type="number" id="potassium" class="form-control" value="40" min="0" max="300" step="0.1" required>
+                        </div>
+
+                        <!-- SOIL PH -->
+                        <div class="form-group">
+                            <label for="ph">Soil pH <span class="unit">0 - 14</span></label>
+                            <input type="number" id="ph" class="form-control" value="6.5" min="0" max="14" step="0.1" required>
+                        </div>
+
+                        <!-- ORGANIC CARBON -->
+                        <div class="form-group">
+                            <label for="organicCarbon">Organic Carbon <span class="unit">%</span></label>
+                            <input type="number" id="organicCarbon" class="form-control" value="0.55" min="0" max="5" step="0.01">
+                        </div>
+
+                        <!-- SOIL MOISTURE -->
+                        <div class="form-group">
+                            <label for="moisture">Soil Moisture <span class="unit">%</span></label>
+                            <input type="number" id="moisture" class="form-control" value="35" min="0" max="100" step="1">
+                        </div>
+
+                        <!-- PLOT AREA -->
+                        <div class="form-group">
+                            <label for="plotArea">Farm Plot Area</label>
+                            <input type="number" id="plotArea" class="form-control" value="2.0" min="0.1" max="1000" step="0.1" required>
+                        </div>
+
+                        <!-- AREA UNIT -->
+                        <div class="form-group">
+                            <label for="areaUnit">Area Unit</label>
+                            <select id="areaUnit" class="form-control">
+                                <option value="Acre" selected>Acre</option>
+                                <option value="Hectare">Hectare</option>
+                            </select>
+                        </div>
+
+                        <!-- GROWTH STAGE -->
+                        <div class="form-group">
+                            <label for="growthStage">Crop Growth Stage</label>
+                            <select id="growthStage" class="form-control">
+                                <option value="Sowing">Sowing / Basal</option>
+                                <option value="Vegetative" selected>Vegetative / Tillering</option>
+                                <option value="Flowering">Flowering / Booting</option>
+                                <option value="Harvest">Maturity / Harvest</option>
+                            </select>
+                        </div>
+
+                        <!-- BUDGET -->
+                        <div class="form-group">
+                            <label for="budget">Budget (₹) <span class="unit">INR</span></label>
+                            <input type="number" id="budget" class="form-control" value="3000" min="100" step="100">
+                        </div>
+
+                    </div>
+
+                    <button type="submit" id="recommendBtn" class="btn btn-accent" style="width:100%; margin-top:20px; padding:15px;">
+                        🔍 Generate Optimal Recommendation & Cost Plan
+                    </button>
+                </form>
+            </div>
+
+            <!-- SIDEBAR / SUMMARY & STATS -->
+            <div>
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header">
+                        <div class="card-title">📊 System Highlights</div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
+                        <div style="background:#f0f7f1; padding:12px; border-radius:8px;">
+                            <span style="font-size:12px; color:#5e7364;">Total Recommendations</span>
+                            <h3 style="color:#176b3a;" id="statTotalRecs">--</h3>
+                        </div>
+                        <div style="background:#f0f7f1; padding:12px; border-radius:8px;">
+                            <span style="font-size:12px; color:#5e7364;">Farmer Savings</span>
+                            <h3 style="color:#176b3a;" id="statTotalSavings">₹ --</h3>
+                        </div>
+                    </div>
+                    <p style="font-size:14px; color:#5e7364;">
+                        Our Random Forest classification model is trained on over 10,000 empirical soil-crop instances, coupled with standard government fertilizer price benchmarks.
+                    </p>
+                </div>
+
+                <!-- NUTRIENT CHART CARD -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📈 Nutrient Balance Chart</div>
+                    </div>
+                    <div style="position:relative; height:240px;">
+                        <canvas id="nutrientChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= RESULT CARD ================= -->
+        <div class="result-card" id="resultCard">
+            <span class="result-badge">AI RECOMMENDED FERTILIZER</span>
+            <div class="result-fert-name">
+                🌱 <span id="fertilizerName">Urea</span>
+                <span id="fertilizerNPK" style="font-size:16px; background:rgba(255,255,255,0.2); padding:4px 10px; border-radius:12px; font-weight:600;">NPK: 46:0:0</span>
+            </div>
+            <p class="result-tagline" id="fertDesc">
+                Optimal nitrogenous fertilizer for lush vegetative development.
+            </p>
+
+            <div class="savings-banner">
+                <div>
+                    <div>💰 <strong>Estimated Cost:</strong> <span id="estimatedCost">₹ 533</span> (Standard Blanket Cost: <span id="standardCost" style="text-decoration:line-through;">₹ 1,200</span>)</div>
+                    <small style="color:#e8f7db;">Calculated using current subsidized market rates.</small>
+                </div>
+                <div>
+                    <span style="font-size:13px; color:#d8f5dc;">Total Money Saved:</span>
+                    <strong id="savingsAmount" style="font-size:22px;">₹ 667</strong>
+                </div>
+            </div>
+
+            <div class="metrics-row">
+                <div class="metric-box">
+                    <div class="metric-label">Recommended Dosage</div>
+                    <div class="metric-val" id="dosageKg">90.0 kg</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Standard Bags</div>
+                    <div class="metric-val" id="bagsCount">2 Bags</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Application Method</div>
+                    <div class="metric-val" style="font-size:14px;" id="appMethod">Broadcasting / Split</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Soil Health Index</div>
+                    <div class="metric-val" style="font-size:14px; color:#c9f59f;">Optimal</div>
+                </div>
+            </div>
+
+            <!-- EXPLAINABLE AI ATTRIBUTION BOX -->
+            <div id="xaiResultSnippet" style="background:rgba(255,255,255,0.15); border-radius:12px; padding:16px; margin-top:20px; display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="color:#aff4c6; margin:0; font-size:16px;">🔍 Explainable AI: Why did the model choose this?</h4>
+                    <a href="/explainability" style="color:#fff; font-size:12px; text-decoration:underline;">Inspect Full Model Tree Paths →</a>
+                </div>
+                <p id="xaiNarrativeText" style="color:#ffffff; font-size:13px; margin:8px 0 0 0; line-height:1.4;"></p>
+                <div id="xaiTopDriversTags" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;"></div>
+            </div>
+
+            <!-- STAGE WISE APPLICATION -->
+            <div style="background:rgba(255,255,255,0.1); border-radius:12px; padding:20px; margin-top:20px;">
+                <h3 style="color:white; margin-bottom:12px; font-size:18px;">📅 Stage-Wise Application Schedule</h3>
+                <div class="schedule-list" id="scheduleList">
+                    <!-- Injected by script.js -->
+                </div>
+            </div>
+
+            <div style="margin-top:24px; display:flex; gap:12px;">
+                <a href="/soil-card" class="btn btn-primary">📄 Print Official Soil Health Card</a>
+                <a href="/ai-assistant" class="btn btn-outline">🤖 Ask AI Assistant about this dose</a>
+            </div>
+        </div>
+
+        <!-- ================= RECENT HISTORY ================= -->
+        <div class="card" style="margin-top:35px;">
+            <div class="card-header">
+                <div class="card-title">📋 Recent Soil & Fertilizer Recommendations</div>
+                <a href="/dashboard" style="font-size:14px; color:#176b3a; font-weight:700; text-decoration:none;">View Full Dashboard →</a>
+            </div>
+            <div id="historyList">
+                Loading history...
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-brand">🌱 Agri<span>Smart</span></div>
+                <div class="footer-desc">Fertilizer Optimization & Decision Support System • CSE Integrated Project</div>
+            </div>
+            <div style="font-size:13px; color:#87aa90;">
+                Built for farmers with Machine Learning, Agronomy & Economics.
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

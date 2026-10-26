@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explainable AI (XAI) | AgriSmart Fertilizer Optimizer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for XAI charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .xai-pill {
+            display: inline-block;
+            background: #e6f4ea;
+            color: #137333;
+            border: 1px solid #ceead6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .method-card {
+            border: 1px solid #dce7dc;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 24px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #5f6368;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            color: #176b3a;
+            border-bottom-color: #176b3a;
+        }
+        .driver-positive {
+            color: #137333;
+            font-weight: 700;
+        }
+        .driver-negative {
+            color: #d93025;
+            font-weight: 700;
+        }
+        .disclaimer-box {
+            background-color: #fff8e1;
+            border-left: 5px solid #f9ab00;
+            color: #795548;
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .stat-card-xai {
+            background: #f7faf8;
+            border: 1px solid #e2ebe3;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-card-xai h3 {
+            margin: 4px 0 0 0;
+            font-size: 26px;
+            color: #176b3a;
+        }
+        .stat-card-xai span {
+            font-size: 12px;
+            color: #5e7364;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            🌱 Agri<span>Smart</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/recommend" class="nav-link">🌱 Recommender</a>
+            <a href="/cost-optimizer" class="nav-link">💰 Cost Optimizer</a>
+            <a href="/explainability" class="nav-link active">🔍 Explainable AI</a>
+            <a href="/ai-assistant" class="nav-link">🤖 AI Assistant</a>
+            <a href="/marketplace" class="nav-link">🛒 Marketplace</a>
+            <a href="/soil-card" class="nav-link">📄 Soil Card</a>
+        </div>
+    </nav>
+
+    <!-- ================= HEADER SECTION ================= -->
+    <div style="background:#eaf4ec; border-bottom:1px solid #d4e5d6; padding:30px 6%;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div style="display:inline-block; background:#176b3a; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:4px; margin-bottom:10px;">
+                MACHINE LEARNING INTERPRETABILITY • 200 ENSEMBLE TREES
+            </div>
+            <h1 style="font-size:30px; color:#124726; margin:0 0 8px 0;">🔍 Explainable AI (XAI) & Model Transparency</h1>
+            <p style="color:#4a6350; font-size:15px; margin:0; max-width:850px;">
+                Inspect how the Random Forest classifier makes its agricultural recommendations. Understand both global feature importance across 10,000 historical training records and exact local tree-path contributions for any individual field recommendation.
+            </p>
+        </div>
+    </div>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <main class="container" style="max-width:1200px; padding:30px 20px;">
+
+        <!-- SCIENTIFIC INTEGRITY & CORRELATION DISCLAIMER -->
+        <div class="disclaimer-box">
+            <strong>⚠️ Scientific & Statistical Distinction Notice:</strong>
+            <ul style="margin:6px 0 0 18px; padding:0;">
+                <li><strong>Global Importance (MDI):</strong> Shows which variables the model relies on most frequently to split decisions across the entire training dataset.</li>
+                <li><strong>Local Attribution (Tree Path Decomposition):</strong> Shows which specific measurements pushed the model towards or against a single recommendation.</li>
+                <li><strong>Correlation vs. Causation:</strong> These values reflect statistical patterns learned from empirical data. They represent machine learning decision logic, not direct biological or biochemical causation.</li>
+            </ul>
+        </div>
+
+        <!-- TABS -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" id="tabGlobalBtn" onclick="switchTab('global')">🌐 Global Feature Importance (All Trees)</button>
+            <button class="tab-btn" id="tabLocalBtn" onclick="switchTab('local')">🎯 Local Prediction Explainer (Single Field)</button>
+        </div>
+
+        <!-- ================= TAB 1: GLOBAL FEATURE IMPORTANCE ================= -->
+        <div id="tabGlobalContent">
+            
+            <div class="method-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+                    <div>
+                        <h2 style="font-size:20px; color:#124726; margin:0;">Global Feature Importance (Mean Decrease in Impurity - MDI)</h2>
+                        <span style="font-size:13px; color:#5e7364;">Evaluated across all 200 Decision Trees & 10,000 Training Records</span>
+                    </div>
+                    <span class="xai-pill">Scikit-Learn Gini MDI</span>
+                </div>
+                <p style="font-size:14px; color:#555; line-height:1.5; margin:0 0 20px 0;">
+                    Mean Decrease in Impurity measures the total reduction in Gini impurity brought by each feature when splitting nodes in the Random Forest. Features with higher importance are the most informative signals the model uses to categorize soil types into fertilizer classes.
+                </p>
+
+                <!-- CHART CONTAINER -->
+                <div style="background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:20px; margin-bottom:25px;">
+                    <h4 style="margin:0 0 15px 0; color:#176b3a;">📊 Relative Feature Importance Ranking (%)</h4>
+                    <div style="position:relative; height:450px;">
+                        <canvas id="globalChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- TABLE OF FEATURES -->
+                <h4 style="margin:0 0 12px 0; color:#176b3a;">📋 Detailed Feature Impact Breakdown</h4>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#f0f7f1; text-align:left;">
+                            <th style="padding:10px; font-size:13px; color:#176b3a;">Rank</th>
+                            <th style="padding:10px; font-size:13px; color:#176b3a;">Agronomic Feature</th>
+                            <th style="padding:10px; font-size:13px; color:#176b3a;">Importance Score</th>
+                            <th style="padding:10px; font-size:13px; color:#176b3a;">Share of Decision</th>
+                            <th style="padding:10px; font-size:13px; color:#176b3a;">Agronomic Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="globalTableBody">
+                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#888;">Loading global feature importance...</td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 2: LOCAL PREDICTION EXPLAINER ================= -->
+        <div id="tabLocalContent" style="display:none;">
+
+            <div class="grid-2" style="align-items:start; margin-bottom:25px;">
+                
+                <!-- INPUT FORM -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🧪 Configure Test Case for Explanation</div>
+                    </div>
+                    <form id="localExplainForm">
+                        <div class="form-grid">
+                            
+                            <div class="form-group" style="grid-column:span 2;">
+                                <label for="xaiCrop">Select Crop</label>
+                                <select id="xaiCrop" class="form-control" required>
+                                    <option value="Wheat" selected>Wheat (गेंहू)</option>
+                                    <option value="Rice">Rice / Paddy (धान)</option>
+                                    <option value="Maize">Maize (मक्का)</option>
+                                    <option value="Cotton">Cotton (कपास)</option>
+                                    <option value="Sugarcane">Sugarcane (गन्ना)</option>
+                                    <option value="Potato">Potato (आलू)</option>
+                                    <option value="Tomato">Tomato (टमाटर)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiSoilType">Soil Type</label>
+                                <select id="xaiSoilType" class="form-control">
+                                    <option value="Loamy" selected>Loamy (दोमट)</option>
+                                    <option value="Clay">Clay (चिकनी)</option>
+                                    <option value="Sandy">Sandy (बलुई)</option>
+                                    <option value="Silt">Silt (गाद)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiN">Nitrogen (N) <span class="unit">kg/ha</span></label>
+                                <input type="number" id="xaiN" class="form-control" value="38" min="0" max="300" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiP">Phosphorus (P) <span class="unit">kg/ha</span></label>
+                                <input type="number" id="xaiP" class="form-control" value="52" min="0" max="300" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiK">Potassium (K) <span class="unit">kg/ha</span></label>
+                                <input type="number" id="xaiK" class="form-control" value="45" min="0" max="300" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiPH">Soil pH</label>
+                                <input type="number" id="xaiPH" class="form-control" value="6.5" min="0" max="14" step="0.1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="xaiOC">Organic Carbon (%)</label>
+                                <input type="number" id="xaiOC" class="form-control" value="0.45" min="0" max="5" step="0.01">
+                            </div>
+
+                        </div>
+
+                        <button type="submit" id="explainBtn" class="btn btn-accent" style="width:100%; margin-top:20px; padding:14px;">
+                            🔍 Explain Model Decision for this Sample
+                        </button>
+                    </form>
+                </div>
+
+                <!-- OVERVIEW OF METHOD -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">💡 How Local Attribution Works</div>
+                    </div>
+                    <p style="font-size:13px; color:#555; line-height:1.5;">
+                        We implement <strong>Exact Decision Tree Path Decomposition (TreeInterpreter method)</strong> natively supported by your trained Random Forest model.
+                    </p>
+                    <div style="background:#f0f7f1; border-left:4px solid #176b3a; padding:12px; border-radius:4px; font-size:13px; color:#124726; margin:14px 0;">
+                        $$\text{Confidence}(\text{Class}) = \text{Base Prior Rate} + \sum_{i} \text{Contribution}_i$$
+                    </div>
+                    <ul style="font-size:13px; color:#555; padding-left:20px; line-height:1.6;">
+                        <li><strong>Base Prior Probability:</strong> The average probability of this fertilizer across all 10,000 training samples before inspecting this specific farmer's soil.</li>
+                        <li><strong><span style="color:#137333;">Positive Drivers (+):</span></strong> Soil features that directed tree branches towards recommending this fertilizer.</li>
+                        <li><strong><span style="color:#d93025;">Negative Drivers (-):</span></strong> Features that reduced the likelihood of this fertilizer.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- LOCAL EXPLANATION RESULTS -->
+            <div id="localResultSection" style="display:none;">
+                
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-bottom:24px;">
+                    <div class="stat-card-xai">
+                        <span>Predicted Fertilizer</span>
+                        <h3 id="resLocalFert">--</h3>
+                    </div>
+                    <div class="stat-card-xai">
+                        <span>Model Confidence</span>
+                        <h3 id="resLocalConf">-- %</h3>
+                    </div>
+                    <div class="stat-card-xai">
+                        <span>Base Prior Rate</span>
+                        <h3 id="resLocalBase">-- %</h3>
+                    </div>
+                    <div class="stat-card-xai">
+                        <span>Net Feature Shift</span>
+                        <h3 id="resLocalShift">-- %</h3>
+                    </div>
+                </div>
+
+                <!-- PLAIN LANGUAGE NARRATIVE BOX -->
+                <div class="card" style="background:#eaf4ec; border:1px solid #c2e0c6; margin-bottom:24px;">
+                    <h4 style="margin:0 0 8px 0; color:#124726;">📝 Natural Language Model Explanation</h4>
+                    <p id="resNarrative" style="margin:0; font-size:15px; color:#1e4620; line-height:1.5;"></p>
+                </div>
+
+                <div class="grid-2">
+                    
+                    <!-- WATERFALL / CONTRIBUTION BAR CHART -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">📊 Feature Contribution Waterfall (% Probability Shift)</div>
+                        </div>
+                        <p class="card-desc">
+                            Green bars pushed the decision towards the prediction; Red bars pushed away from it:
+                        </p>
+                        <div style="position:relative; height:360px;">
+                            <canvas id="localChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- DRIVERS TABLE -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">📋 Key Feature Drivers for this Prediction</div>
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                            <thead>
+                                <tr style="background:#f0f7f1; text-align:left;">
+                                    <th style="padding:8px; font-size:12px; color:#176b3a;">Feature</th>
+                                    <th style="padding:8px; font-size:12px; color:#176b3a;">Value</th>
+                                    <th style="padding:8px; font-size:12px; color:#176b3a;">Probability Shift</th>
+                                    <th style="padding:8px; font-size:12px; color:#176b3a;">Direction</th>
+                                </tr>
+                            </thead>
+                            <tbody id="localDriversTable">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="text-align:center; padding:30px; color:#666; font-size:13px; border-top:1px solid #dce7dc; margin-top:50px;">
+        🌱 AgriSmart Explainable AI Engine • Mathematical Model Transparency for Agricultural Decision Support
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        let globalChartInstance = null;
+        let localChartInstance = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadGlobalExplanation();
+            document.getElementById("localExplainForm").addEventListener("submit", handleLocalExplainSubmit);
+            // Auto run local explanation with defaults
+            runLocalExplanation();
+        });
+
+        function switchTab(tab) {
+            document.getElementById("tabGlobalBtn").classList.toggle("active", tab === "global");
+            document.getElementById("tabLocalBtn").classList.toggle("active", tab === "local");
+            document.getElementById("tabGlobalContent").style.display = tab === "global" ? "block" : "none";
+            document.getElementById("tabLocalContent").style.display = tab === "local" ? "block" : "none";
+        }
+
+        async function loadGlobalExplanation() {
+            try {
+                const res = await fetch("/api/explain/global");
+                const data = await res.json();
+                if (data.success && data.features) {
+                    renderGlobalChart(data.features);
+                    renderGlobalTable(data.features);
+                }
+            } catch (e) {
+                console.error("Could not load global explanations:", e);
+            }
+        }
+
+        function renderGlobalChart(features) {
+            const ctx = document.getElementById("globalChart").getContext("2d");
+            const top10 = features.slice(0, 10);
+            const labels = top10.map(f => f.display_name);
+            const values = top10.map(f => f.percentage);
+
+            if (globalChartInstance) globalChartInstance.destroy();
+
+            globalChartInstance = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Feature Importance (%)",
+                        data: values,
+                        backgroundColor: "rgba(34, 160, 107, 0.75)",
+                        borderColor: "#22a06b",
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `Importance Share: ${ctx.parsed.x.toFixed(2)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: "Share of Total Gini Impurity Reduction (%)" }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderGlobalTable(features) {
+            const tbody = document.getElementById("globalTableBody");
+            tbody.innerHTML = features.map(f => `
+                <tr style="border-bottom:1px solid #e0e0e0;">
+                    <td style="padding:10px; font-weight:700; color:#176b3a;">#${f.rank}</td>
+                    <td style="padding:10px; font-weight:600; color:#124726;">${f.display_name}</td>
+                    <td style="padding:10px; font-family:monospace; font-size:13px;">${f.importance.toFixed(4)}</td>
+                    <td style="padding:10px;">
+                        <span class="xai-pill">${f.percentage.toFixed(2)}%</span>
+                    </td>
+                    <td style="padding:10px; font-size:13px; color:#555;">${f.description}</td>
+                </tr>
+            `).join("");
+        }
+
+        async function handleLocalExplainSubmit(e) {
+            e.preventDefault();
+            await runLocalExplanation();
+        }
+
+        async function runLocalExplanation() {
+            const btn = document.getElementById("explainBtn");
+            btn.disabled = true;
+            btn.innerHTML = "⏳ Computing Tree Path Decomposition...";
+
+            const payload = {
+                crop: document.getElementById("xaiCrop").value,
+                soil_type: document.getElementById("xaiSoilType").value,
+                nitrogen: parseFloat(document.getElementById("xaiN").value) || 50.0,
+                phosphorus: parseFloat(document.getElementById("xaiP").value) || 50.0,
+                potassium: parseFloat(document.getElementById("xaiK").value) || 50.0,
+                soil_ph: parseFloat(document.getElementById("xaiPH").value) || 6.5,
+                organic_carbon: parseFloat(document.getElementById("xaiOC").value) || 0.5
+            };
+
+            try {
+                const res = await fetch("/api/explain/local", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    renderLocalResults(data);
+                }
+            } catch (err) {
+                console.error("Local XAI error:", err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "🔍 Explain Model Decision for this Sample";
+            }
+        }
+
+        function renderLocalResults(data) {
+            const sec = document.getElementById("localResultSection");
+            sec.style.display = "block";
+
+            document.getElementById("resLocalFert").textContent = data.predicted_fertilizer;
+            document.getElementById("resLocalConf").textContent = `${data.confidence.toFixed(1)}%`;
+            document.getElementById("resLocalBase").textContent = `${data.base_probability.toFixed(1)}%`;
+
+            const shift = data.confidence - data.base_probability;
+            const shiftEl = document.getElementById("resLocalShift");
+            shiftEl.textContent = `${shift >= 0 ? '+' : ''}${shift.toFixed(1)}%`;
+            shiftEl.style.color = shift >= 0 ? "#137333" : "#d93025";
+
+            document.getElementById("resNarrative").innerHTML = data.narrative.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+            // Render diverging bar chart
+            renderLocalChart(data.all_feature_contributions.slice(0, 8));
+
+            // Render table
+            const tbody = document.getElementById("localDriversTable");
+            const combined = [...data.positive_drivers, ...data.negative_drivers].slice(0, 7);
+            tbody.innerHTML = combined.map(d => `
+                <tr style="border-bottom:1px solid #e0e0e0;">
+                    <td style="padding:8px; font-weight:600; font-size:13px;">${d.display_name}</td>
+                    <td style="padding:8px; font-size:13px; color:#555;">${d.current_value}</td>
+                    <td style="padding:8px; font-size:13px;" class="${d.contribution >= 0 ? 'driver-positive' : 'driver-negative'}">
+                        ${d.percentage_impact >= 0 ? '+' : ''}${d.percentage_impact.toFixed(1)}%
+                    </td>
+                    <td style="padding:8px; font-size:12px; color:#555;">${d.direction}</td>
+                </tr>
+            `).join("");
+        }
+
+        function renderLocalChart(features) {
+            const ctx = document.getElementById("localChart").getContext("2d");
+            const labels = features.map(f => `${f.display_name} (${f.current_value})`);
+            const values = features.map(f => f.impact_percent);
+            const bgColors = values.map(v => v >= 0 ? "rgba(34, 160, 107, 0.75)" : "rgba(217, 48, 37, 0.75)");
+            const borderColors = values.map(v => v >= 0 ? "#22a06b" : "#d93025");
+
+            if (localChartInstance) localChartInstance.destroy();
+
+            localChartInstance = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Probability Impact (%)",
+                        data: values,
+                        backgroundColor: bgColors,
+                        borderColor: borderColors,
+                        borderWidth: 1.5,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `Contribution: ${ctx.parsed.x >= 0 ? '+' : ''}${ctx.parsed.x.toFixed(2)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Probability Shift Towards Predicted Fertilizer (%)" }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

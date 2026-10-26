@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart | Marketplace (Buy Fertilizers & Sell Crops)</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .market-banner {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border: 1px solid #c8e6c9;
+            border-left: 6px solid #2e7d32;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .market-banner .tag {
+            background: #2e7d32;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .market-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e0ede2;
+            padding-bottom: 8px;
+        }
+        .market-tab-btn {
+            padding: 10px 22px;
+            border: none;
+            background: #ffffff;
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            border: 1px solid #cfe5d2;
+            transition: all 0.2s ease;
+        }
+        .market-tab-btn.active {
+            background: #2e7d32;
+            color: #ffffff;
+            border-color: #2e7d32;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .product-card {
+            background: #ffffff;
+            border: 1px solid #dceadc;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .product-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #174d25;
+            margin: 0;
+        }
+        .product-price {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2e7d32;
+        }
+        .product-unit {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        .npk-badge {
+            display: inline-block;
+            background: #eef7ee;
+            color: #1b5e20;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            border: 1px solid #c8e6c9;
+        }
+        .listings-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .listings-table th, .listings-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e8f0e9;
+            font-size: 14px;
+        }
+        .listings-table th {
+            background: #2e7d32;
+            color: #fff;
+            font-weight: 700;
+        }
+        .listings-table tr:hover {
+            background: #f9fdfa;
+        }
+        .msp-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            🌱 Agri<span>Smart</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/recommend" class="nav-link">🌱 Recommender</a>
+            <a href="/cost-optimizer" class="nav-link">💰 Cost Optimizer</a>
+            <a href="/explainability" class="nav-link">🔍 Explainable AI</a>
+            <a href="/ai-assistant" class="nav-link">🤖 AI Assistant</a>
+            <a href="/marketplace" class="nav-link active">🛒 Marketplace</a>
+            <a href="/soil-card" class="nav-link">📄 Soil Card</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- TITLE HEADER -->
+        <div class="page-header" style="margin-top:20px; margin-bottom:20px;">
+            <h1 style="font-size:28px; color:#174d25; margin-bottom:6px;">🛒 Agricultural Technology Marketplace</h1>
+            <p style="color:#4a6b52; font-size:15px; margin:0;">
+                Transparent fertilizer price benchmarks, authorized dealer catalogs, and farmer crop mandi listings.
+            </p>
+        </div>
+
+        <!-- DEMONSTRATION NOTICE -->
+        <div class="market-banner">
+            <div>
+                <span class="tag">Academic Demonstration Mode</span>
+                <p style="margin:6px 0 0; color:#1b4332; font-size:13.5px; line-height:1.4;">
+                    <strong>Notice:</strong> Fertilizer prices reflect <em>Department of Fertilizers (DoF) statutory subsidized rates</em> and indicative market benchmarks. Crop listings reflect simulated mandi sales with official Minimum Support Price (MSP) comparisons.
+                </p>
+            </div>
+            <div style="font-size:32px;">🏛️</div>
+        </div>
+
+        <!-- TABS -->
+        <div class="market-tabs">
+            <button class="market-tab-btn active" id="tabFertBtn" onclick="switchTab('fertilizers')">
+                🌱 Buy Fertilizers (Catalog & Estimation)
+            </button>
+            <button class="market-tab-btn" id="tabCropBtn" onclick="switchTab('crops')">
+                🌾 Sell Crops (Mandi Listings & Post)
+            </button>
+        </div>
+
+        <!-- ================= SECTION 1: FERTILIZERS CATALOG ================= -->
+        <div id="sectionFertilizers">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 style="font-size:20px; color:#174d25; margin:0;">Authorized Fertilizer Offerings</h2>
+                <span style="font-size:13px; color:#5c7863;">Showing statutory & indicative MRP rates</span>
+            </div>
+
+            <div class="product-grid" id="fertilizerGrid">
+                <!-- Dynamically populated or default fallback -->
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">Urea (Neem Coated)</h3>
+                            <span class="badge badge-success">Govt Subsidized</span>
+                        </div>
+                        <span class="npk-badge">N: 46% | P: 0% | K: 0%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            Quick-release nitrogen fertilizer for vegetative growth and tillering.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 266.50</div>
+                                <div class="product-unit">per 45 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('Urea', 266.50, 45)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">DAP (Di-Ammonium Phos.)</h3>
+                            <span class="badge badge-success">NBS Subsidized</span>
+                        </div>
+                        <span class="npk-badge">N: 18% | P: 46% | K: 0%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            High-phosphorus basal fertilizer essential for rapid root establishment.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 1,350.00</div>
+                                <div class="product-unit">per 50 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('DAP', 1350.00, 50)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">MOP (Muriate of Potash)</h3>
+                            <span class="badge badge-info">Benchmark</span>
+                        </div>
+                        <span class="npk-badge">N: 0% | P: 0% | K: 60%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            Potassium chloride for drought resistance, lodging strength, and grain filling.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 1,700.00</div>
+                                <div class="product-unit">per 50 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('MOP', 1700.00, 50)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">NPK Complex (10:26:26)</h3>
+                            <span class="badge badge-info">Benchmark</span>
+                        </div>
+                        <span class="npk-badge">N: 10% | P: 26% | K: 26%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            Balanced multi-nutrient compound fertilizer for pulses, oilseeds and vegetables.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 1,470.00</div>
+                                <div class="product-unit">per 50 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('NPK', 1470.00, 50)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">Single Super Phosphate (SSP)</h3>
+                            <span class="badge badge-success">Sulphur Enriched</span>
+                        </div>
+                        <span class="npk-badge">P: 16% | S: 11% | Ca: 19%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            Water-soluble phosphorus with essential secondary plant nutrients.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 550.00</div>
+                                <div class="product-unit">per 50 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('SSP', 550.00, 50)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div>
+                        <div class="product-header">
+                            <h3 class="product-title">Organic Vermicompost</h3>
+                            <span class="badge badge-warning">Bio-Organic</span>
+                        </div>
+                        <span class="npk-badge">OC: >14% | N-P-K: 1.5-1-1.5%</span>
+                        <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                            Enhances soil organic carbon, moisture retention and microbial biodiversity.
+                        </p>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed #d5e4d7; padding-top:12px; margin-top:10px;">
+                            <div>
+                                <div class="product-price">₹ 200.00</div>
+                                <div class="product-unit">per 50 kg bag</div>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="estimateQuote('Compost', 200.00, 50)">Calculate Quote</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUOTE ESTIMATOR BOX -->
+            <div id="quoteModal" class="card" style="display:none; background:#f4faf5; border:1px solid #c2e2c8; margin-bottom:30px;">
+                <h3 style="color:#174d25; margin-bottom:10px;">🧮 Sample Purchase Quote Calculator</h3>
+                <div style="display:flex; flex-wrap:wrap; gap:15px; align-items:center;">
+                    <div>Selected Product: <strong id="quoteProdName">Urea</strong></div>
+                    <div>Unit Price: <strong id="quoteProdPrice">₹ 266.50</strong></div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <label for="quoteBags">Quantity (Bags):</label>
+                        <input type="number" id="quoteBags" min="1" max="1000" value="10" style="width:90px; padding:6px 10px; border-radius:6px; border:1px solid #b3d1b8;" oninput="updateTotalQuote()">
+                    </div>
+                    <div>Estimated Total Cost: <strong id="quoteTotal" style="color:#2e7d32; font-size:18px;">₹ 2,665.00</strong></div>
+                </div>
+                <div style="margin-top:12px; font-size:12.5px; color:#5b7863;">
+                    ℹ️ <em>In commercial production, orders are fulfilled through certified Primary Agricultural Credit Societies (PACS) or licensed local fertilizer retail outlets under DBT point-of-sale authentication.</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 2: SELL CROPS ================= -->
+        <div id="sectionCrops" style="display:none;">
+            <div style="display:grid; grid-template-columns: 1fr 340px; gap:25px; margin-bottom:30px;">
+                
+                <!-- LISTINGS TABLE -->
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h2 style="font-size:20px; color:#174d25; margin:0;">🌾 Active Farmer Crop Listings</h2>
+                        <button class="btn btn-sm btn-outline" onclick="loadCropListings()">🔄 Refresh Listings</button>
+                    </div>
+
+                    <table class="listings-table">
+                        <thead>
+                            <tr>
+                                <th>Crop</th>
+                                <th>Farmer / Mandi</th>
+                                <th>Quantity</th>
+                                <th>Expected Price</th>
+                                <th>Govt MSP Ref.</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cropTableBody">
+                            <tr>
+                                <td><strong>Wheat (HD-2967)</strong></td>
+                                <td>Ramesh Singh<br><small style="color:#777;">Ludhiana, Punjab</small></td>
+                                <td>65 Quintals</td>
+                                <td style="font-weight:700; color:#2e7d32;">₹ 2,275 / Qtl</td>
+                                <td><span class="msp-badge">MSP: ₹2,275</span></td>
+                                <td><span class="badge badge-success">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cotton (Medium Staple)</strong></td>
+                                <td>Suresh Patel<br><small style="color:#777;">Rajkot, Gujarat</small></td>
+                                <td>40 Quintals</td>
+                                <td style="font-weight:700; color:#2e7d32;">₹ 7,120 / Qtl</td>
+                                <td><span class="msp-badge">MSP: ₹7,121</span></td>
+                                <td><span class="badge badge-success">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Paddy (Basmati / Common)</strong></td>
+                                <td>Anita Sharma<br><small style="color:#777;">Karnal, Haryana</small></td>
+                                <td>80 Quintals</td>
+                                <td style="font-weight:700; color:#2e7d32;">₹ 2,300 / Qtl</td>
+                                <td><span class="msp-badge">MSP: ₹2,300</span></td>
+                                <td><span class="badge badge-success">Available</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ADD LISTING FORM -->
+                <div class="card" style="height:fit-content; background:#fff; border:1px solid #cfe2d2;">
+                    <h3 style="color:#174d25; margin-bottom:12px; font-size:18px;">➕ Post Sample Crop Listing</h3>
+                    <p style="font-size:12.5px; color:#666; margin-bottom:15px;">
+                        Add your harvested crop details to the marketplace demonstration table.
+                    </p>
+
+                    <form id="addCropForm" onsubmit="submitCropListing(event)">
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label style="font-size:13px; font-weight:700;">Farmer / Trader Name</label>
+                            <input type="text" id="cropFarmerName" required placeholder="e.g. Gurdeep Singh" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #c0d8c4;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label style="font-size:13px; font-weight:700;">Location / District</label>
+                            <input type="text" id="cropLocation" required placeholder="e.g. Ambala, Haryana" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #c0d8c4;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label style="font-size:13px; font-weight:700;">Crop Name</label>
+                            <select id="cropSelect" required style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #c0d8c4;">
+                                <option value="Wheat">Wheat</option>
+                                <option value="Rice">Rice / Paddy</option>
+                                <option value="Maize">Maize</option>
+                                <option value="Cotton">Cotton</option>
+                                <option value="Sugarcane">Sugarcane</option>
+                                <option value="Soybean">Soybean</option>
+                                <option value="Mustard">Mustard</option>
+                                <option value="Pulses">Pulses / Gram</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label style="font-size:13px; font-weight:700;">Quantity (Quintals)</label>
+                            <input type="number" id="cropQty" required min="1" step="0.5" value="50" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #c0d8c4;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="font-size:13px; font-weight:700;">Expected Price (₹ / Quintal)</label>
+                            <input type="number" id="cropPrice" required min="100" step="10" value="2350" style="width:100%; padding:8px 10px; border-radius:6px; border:1px solid #c0d8c4;">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width:100%;">
+                            🌾 Post Listing (Demo)
+                        </button>
+                    </form>
+                    <div id="cropFormMsg" style="margin-top:10px; font-size:12.5px; font-weight:700; text-align:center;"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentQuotePrice = 266.50;
+
+        function switchTab(tab) {
+            const fertSec = document.getElementById("sectionFertilizers");
+            const cropSec = document.getElementById("sectionCrops");
+            const tabFertBtn = document.getElementById("tabFertBtn");
+            const tabCropBtn = document.getElementById("tabCropBtn");
+
+            if (tab === "fertilizers") {
+                fertSec.style.display = "block";
+                cropSec.style.display = "none";
+                tabFertBtn.classList.add("active");
+                tabCropBtn.classList.remove("active");
+            } else {
+                fertSec.style.display = "none";
+                cropSec.style.display = "block";
+                tabCropBtn.classList.add("active");
+                tabFertBtn.classList.remove("active");
+                loadCropListings();
+            }
+        }
+
+        function estimateQuote(name, price, bagKg) {
+            currentQuotePrice = price;
+            document.getElementById("quoteProdName").textContent = `${name} (${bagKg} kg bag)`;
+            document.getElementById("quoteProdPrice").textContent = `₹ ${price.toFixed(2)}`;
+            document.getElementById("quoteModal").style.display = "block";
+            updateTotalQuote();
+            document.getElementById("quoteModal").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateTotalQuote() {
+            const bags = parseFloat(document.getElementById("quoteBags").value) || 0;
+            const total = bags * currentQuotePrice;
+            document.getElementById("quoteTotal").textContent = `₹ ${total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        async function loadCropListings() {
+            try {
+                const res = await fetch("/api/marketplace/crops");
+                const data = await res.json();
+                if (data.success && data.listings && data.listings.length > 0) {
+                    const tbody = document.getElementById("cropTableBody");
+                    tbody.innerHTML = data.listings.map(item => `
+                        <tr>
+                            <td><strong>${escapeHTML(item.crop)}</strong></td>
+                            <td>${escapeHTML(item.farmer_name)}<br><small style="color:#777;">${escapeHTML(item.location || 'Local Mandi')}</small></td>
+                            <td>${item.quantity_quintals} Qtl</td>
+                            <td style="font-weight:700; color:#2e7d32;">₹ ${Number(item.expected_price).toLocaleString('en-IN')} / Qtl</td>
+                            <td><span class="msp-badge">Benchmarked</span></td>
+                            <td><span class="badge badge-success">Available</span></td>
+                        </tr>
+                    `).join("");
+                }
+            } catch (e) {
+                console.warn("Could not fetch remote crop listings:", e);
+            }
+        }
+
+        async function submitCropListing(e) {
+            e.preventDefault();
+            const msgEl = document.getElementById("cropFormMsg");
+            msgEl.textContent = "Posting listing...";
+            msgEl.style.color = "#2e7d32";
+
+            const payload = {
+                farmer_name: document.getElementById("cropFarmerName").value,
+                location: document.getElementById("cropLocation").value,
+                crop: document.getElementById("cropSelect").value,
+                quantity_quintals: parseFloat(document.getElementById("cropQty").value),
+                expected_price: parseFloat(document.getElementById("cropPrice").value)
+            };
+
+            try {
+                const res = await fetch("/api/marketplace/crops", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    msgEl.textContent = "✅ " + data.message;
+                    document.getElementById("addCropForm").reset();
+                    loadCropListings();
+                } else {
+                    msgEl.textContent = "❌ " + (data.message || "Failed to add listing");
+                    msgEl.style.color = "#c62828";
+                }
+            } catch (err) {
+                msgEl.textContent = "❌ Network error. Please try again.";
+                msgEl.style.color = "#c62828";
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return "";
+            return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
+    </script>
+</body>
+</html>

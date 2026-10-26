@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fertilizer Cost Optimizer | AgriSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .badge-statutory {
+            background-color: #e6f4ea;
+            color: #137333;
+            border: 1px solid #ceead6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-subsidy {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            border: 1px solid #d2e3fc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-indicative {
+            background-color: #fef7e0;
+            color: #b06000;
+            border: 1px solid #feefc3;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .price-source-note {
+            font-size: 11px;
+            color: #5f6368;
+            margin-top: 3px;
+        }
+        .strategy-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 16px;
+            background: #fff;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .strategy-card.best-strategy {
+            border-color: #22a06b;
+            background: #f4fbf6;
+            box-shadow: 0 4px 12px rgba(34, 160, 107, 0.15);
+        }
+        .best-badge {
+            position: absolute;
+            top: -12px;
+            right: 16px;
+            background: #22a06b;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .cost-hero {
+            background: linear-gradient(135deg, #176b3a, #0e4324);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .cost-hero h2 {
+            font-size: 32px;
+            margin: 4px 0 0 0;
+            color: #aff4c6;
+        }
+        .progress-bar-bg {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .progress-bar-fill {
+            background: #22a06b;
+            height: 100%;
+            border-radius: 5px;
+        }
+        .warning-box {
+            background-color: #fce8e6;
+            border-left: 5px solid #d93025;
+            color: #a51d24;
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .info-box-scientific {
+            background-color: #e8f4fd;
+            border-left: 5px solid #1a73e8;
+            color: #174ea6;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            🌱 Agri<span>Smart</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/recommend" class="nav-link">🌱 Recommender</a>
+            <a href="/cost-optimizer" class="nav-link active">💰 Cost Optimizer</a>
+            <a href="/explainability" class="nav-link">🔍 Explainable AI</a>
+            <a href="/ai-assistant" class="nav-link">🤖 AI Assistant</a>
+            <a href="/marketplace" class="nav-link">🛒 Marketplace</a>
+            <a href="/soil-card" class="nav-link">📄 Soil Card</a>
+        </div>
+    </nav>
+
+    <!-- ================= HEADER SECTION ================= -->
+    <div style="background:#eaf4ec; border-bottom:1px solid #d4e5d6; padding:30px 6%;">
+        <div style="max-width:1200px; margin:0 auto;">
+            <div style="display:inline-block; background:#176b3a; color:#fff; font-size:12px; font-weight:700; padding:4px 10px; border-radius:4px; margin-bottom:10px;">
+                ICAR AGRONOMIC STANDARDS • LINEAR COST OPTIMIZATION
+            </div>
+            <h1 style="font-size:30px; color:#124726; margin:0 0 8px 0;">💰 Fertilizer Cost Optimizer & Nutrient Minimization</h1>
+            <p style="color:#4a6350; font-size:15px; margin:0; max-width:850px;">
+                Calculate the mathematically verified, least-cost combination of fertilizers that 100% satisfies your crop's N-P-K nutrient demand. Compare traditional straight fertilizers, complex NPK grades, and single super phosphate packages with full statutory price transparency.
+            </p>
+        </div>
+    </div>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="container" style="max-width:1200px; padding:30px 20px;">
+
+        <div class="info-box-scientific">
+            <strong>Scientific & Pricing Integrity Policy:</strong> All nutrient requirements are based on official Indian Council of Agricultural Research (ICAR) Recommended Doses of Fertilizers (RDF). Urea prices are governed by the statutory Maximum Retail Price (MRP) fixed by the Government of India. Prevailing market prices are transparently tagged so you can plan with confidence.
+        </div>
+
+        <div id="errorBanner" class="warning-box" style="display:none;"></div>
+
+        <div class="grid-2" style="align-items:start;">
+            
+            <!-- INPUT FORM CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🌾 Farm & Soil Parameter Configuration</div>
+                </div>
+                <form id="optimizerForm">
+                    <div class="form-grid">
+                        
+                        <!-- CROP -->
+                        <div class="form-group" style="grid-column:span 2;">
+                            <label for="optCrop">Select Crop <span class="unit">Verified ICAR Standards</span></label>
+                            <select id="optCrop" class="form-control" required>
+                                <option value="Wheat" selected>Wheat (गेंहू) — 120:60:40 NPK</option>
+                                <option value="Rice">Rice / Paddy (धान) — 100:50:50 NPK</option>
+                                <option value="Maize">Maize (मक्का) — 120:60:50 NPK</option>
+                                <option value="Cotton">Cotton (कपास) — 100:50:50 NPK</option>
+                                <option value="Sugarcane">Sugarcane (गन्ना) — 150:75:75 NPK</option>
+                                <option value="Potato">Potato (आलू) — 120:80:100 NPK</option>
+                                <option value="Tomato">Tomato (टमाटर) — 100:60:60 NPK</option>
+                                <option value="Soybean">Soybean (सोयाबीन) — 30:60:40 NPK</option>
+                                <option value="Groundnut">Groundnut (मूंगफली) — 25:50:40 NPK</option>
+                            </select>
+                        </div>
+
+                        <!-- PLOT AREA -->
+                        <div class="form-group">
+                            <label for="optArea">Farm Area <span class="unit">Required</span></label>
+                            <input type="number" id="optArea" class="form-control" value="2.0" min="0.1" max="1000" step="0.1" required>
+                        </div>
+
+                        <!-- AREA UNIT -->
+                        <div class="form-group">
+                            <label for="optUnit">Area Unit</label>
+                            <select id="optUnit" class="form-control">
+                                <option value="Acre" selected>Acre</option>
+                                <option value="Hectare">Hectare</option>
+                            </select>
+                        </div>
+
+                        <!-- BUDGET -->
+                        <div class="form-group" style="grid-column:span 2;">
+                            <label for="optBudget">Available Fertilizer Budget (₹) <span class="unit">INR</span></label>
+                            <input type="number" id="optBudget" class="form-control" value="4000" min="100" max="1000000" step="100" required>
+                        </div>
+
+                        <div style="grid-column:span 2; border-top:1px solid #e0e0e0; margin:10px 0 5px 0; padding-top:10px;">
+                            <span style="font-size:13px; font-weight:700; color:#176b3a;">🧪 Current Soil Test Nutrients (kg/ha):</span>
+                        </div>
+
+                        <!-- NITROGEN -->
+                        <div class="form-group">
+                            <label for="optN">Available Nitrogen (N)</label>
+                            <input type="number" id="optN" class="form-control" value="45" min="0" max="300" step="0.1" required>
+                        </div>
+
+                        <!-- PHOSPHORUS -->
+                        <div class="form-group">
+                            <label for="optP">Available Phosphorus (P)</label>
+                            <input type="number" id="optP" class="form-control" value="35" min="0" max="300" step="0.1" required>
+                        </div>
+
+                        <!-- POTASSIUM -->
+                        <div class="form-group" style="grid-column:span 2;">
+                            <label for="optK">Available Potassium (K)</label>
+                            <input type="number" id="optK" class="form-control" value="30" min="0" max="300" step="0.1" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" id="optSubmitBtn" class="btn btn-accent" style="width:100%; margin-top:20px; padding:15px; font-size:16px;">
+                        💰 Compute Least-Cost Fertilizer Combination
+                    </button>
+                </form>
+            </div>
+
+            <!-- PRICE TRANSPARENCY & FERTILIZER OPTIONS CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📋 Transparent Fertilizer Price Catalog</div>
+                </div>
+                <p class="card-desc" style="margin-bottom:15px;">
+                    Government statutory rates vs. indicative market benchmarks currently used by the optimization algorithm:
+                </p>
+                <div id="catalogList" style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="text-align:center; color:#888; padding:20px;">Loading verified catalog...</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= RESULTS SECTION ================= -->
+        <div id="optimizerResult" style="display:none; margin-top:35px;">
+            
+            <!-- COST HERO BANNER -->
+            <div class="cost-hero">
+                <div>
+                    <span style="font-size:13px; text-transform:uppercase; letter-spacing:1px; opacity:0.9;">Optimal Farmer Package</span>
+                    <h2 id="resTotalCost">₹ 0</h2>
+                    <div id="resStrategyName" style="font-size:16px; font-weight:600; margin-top:4px;">Strategy Name</div>
+                </div>
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                    <div style="background:rgba(255,255,255,0.15); padding:10px 16px; border-radius:8px;">
+                        <span style="font-size:12px; display:block; opacity:0.9;">Estimated Farmer Savings</span>
+                        <strong style="font-size:20px; color:#fff;" id="resSavings">₹ 0</strong>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.15); padding:10px 16px; border-radius:8px;">
+                        <span style="font-size:12px; display:block; opacity:0.9;">Budget Status</span>
+                        <strong style="font-size:16px; color:#fff;" id="resBudgetStatus">Within Budget</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WARNINGS / DEFICIT CONTAINER -->
+            <div id="resWarningsContainer"></div>
+
+            <div class="grid-2" style="margin-bottom:30px;">
+                
+                <!-- SELECTED FERTILIZER PACKAGE BREAKDOWN -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📦 Recommended Purchase Package (Integer Bags)</div>
+                    </div>
+                    <p class="card-desc">
+                        Exact quantity of standard subsidized bags required to meet 100% of soil nutrient gaps:
+                    </p>
+                    <table style="width:100%; border-collapse:collapse; margin-top:10px;">
+                        <thead>
+                            <tr style="background:#f0f7f1; text-align:left;">
+                                <th style="padding:10px; font-size:13px; color:#176b3a;">Fertilizer</th>
+                                <th style="padding:10px; font-size:13px; color:#176b3a;">Quantity</th>
+                                <th style="padding:10px; font-size:13px; color:#176b3a;">Unit Price</th>
+                                <th style="padding:10px; font-size:13px; color:#176b3a;">Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resItemsTable">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- NUTRIENT DEFICIT FULFILLMENT -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">⚖️ Nutrient Deficit Fulfillment Check</div>
+                    </div>
+                    <p class="card-desc">
+                        Verification that the recommended package satisfies 100% of defined agricultural nutrient deficits:
+                    </p>
+                    <div id="fulfillmentMetrics" style="display:flex; flex-direction:column; gap:16px; margin-top:15px;">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- STRATEGY COMPARISON -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📊 Multi-Strategy Agricultural Cost Comparison</div>
+                </div>
+                <p class="card-desc" style="margin-bottom:20px;">
+                    Comparison across verified agronomical formulations meeting the same crop nutrient demands:
+                </p>
+                <div id="strategiesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="text-align:center; padding:30px; color:#666; font-size:13px; border-top:1px solid #dce7dc; margin-top:50px;">
+        🌱 AgriSmart Fertilizer Cost Optimization Engine • Ministry of Agriculture & ICAR Reference Standards
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadPriceCatalog();
+            document.getElementById("optimizerForm").addEventListener("submit", handleOptimizeSubmit);
+        });
+
+        async function loadPriceCatalog() {
+            const container = document.getElementById("catalogList");
+            try {
+                const res = await fetch("/api/fertilizer-prices");
+                const data = await res.json();
+                if (data.success && data.catalog) {
+                    container.innerHTML = data.catalog.map(item => {
+                        let badgeClass = "badge-indicative";
+                        if (item.price_type.includes("Statutory")) badgeClass = "badge-statutory";
+                        else if (item.price_type.includes("Subsidy")) badgeClass = "badge-subsidy";
+
+                        return `
+                            <div style="border:1px solid #e2ebe3; border-radius:8px; padding:12px; background:#fff;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <strong style="color:#176b3a; font-size:15px;">${item.name} (${item.bag_size_kg} kg bag)</strong>
+                                    <span style="font-size:15px; font-weight:700; color:#124726;">₹ ${item.price_per_bag.toFixed(2)}</span>
+                                </div>
+                                <div style="font-size:12px; color:#5e7364; margin-top:3px;">
+                                    Nutrient Content: <b>N: ${item.n_percent}% | P₂O₅: ${item.p_percent}% | K₂O: ${item.k_percent}%</b>
+                                </div>
+                                <div style="margin-top:6px;">
+                                    <span class="${badgeClass}">${item.price_type}</span>
+                                </div>
+                                <div class="price-source-note">${item.price_note}</div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            } catch (e) {
+                container.innerHTML = `<div style="color:#d93025; font-size:13px;">Unable to load pricing catalog.</div>`;
+            }
+        }
+
+        async function handleOptimizeSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById("optSubmitBtn");
+            const errBanner = document.getElementById("errorBanner");
+            errBanner.style.display = "none";
+            btn.disabled = true;
+            btn.innerHTML = "⏳ Computing Least-Cost Combinations...";
+
+            const payload = {
+                crop: document.getElementById("optCrop").value,
+                plot_area: parseFloat(document.getElementById("optArea").value) || 1.0,
+                area_unit: document.getElementById("optUnit").value,
+                budget: parseFloat(document.getElementById("optBudget").value) || 3000.0,
+                nitrogen: parseFloat(document.getElementById("optN").value) || 0.0,
+                phosphorus: parseFloat(document.getElementById("optP").value) || 0.0,
+                potassium: parseFloat(document.getElementById("optK").value) || 0.0
+            };
+
+            try {
+                const res = await fetch("/api/optimize-cost", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || "Optimization computation failed.");
+                }
+
+                renderOptimizerResults(data);
+
+            } catch (err) {
+                errBanner.textContent = `❌ ${err.message}`;
+                errBanner.style.display = "block";
+                errBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "💰 Compute Least-Cost Fertilizer Combination";
+            }
+        }
+
+        function renderOptimizerResults(data) {
+            const resDiv = document.getElementById("optimizerResult");
+            resDiv.style.display = "block";
+
+            const opt = data.optimal_plan;
+            document.getElementById("resTotalCost").textContent = `₹ ${opt.total_cost.toLocaleString('en-IN')}`;
+            document.getElementById("resStrategyName").textContent = `Selected: ${opt.strategy_name}`;
+            document.getElementById("resSavings").textContent = `₹ ${opt.savings_amount.toLocaleString('en-IN')}`;
+
+            const budgetStatusEl = document.getElementById("resBudgetStatus");
+            if (opt.within_budget) {
+                budgetStatusEl.textContent = "✅ Within Allocated Budget";
+                budgetStatusEl.style.color = "#aff4c6";
+            } else {
+                budgetStatusEl.textContent = `⚠️ Budget Shortfall: ₹ ${opt.budget_deficit.toLocaleString('en-IN')}`;
+                budgetStatusEl.style.color = "#ffb4ab";
+            }
+
+            // Warnings
+            const warnContainer = document.getElementById("resWarningsContainer");
+            if (data.warnings && data.warnings.length > 0) {
+                warnContainer.innerHTML = data.warnings.map(w => `<div class="warning-box">${w}</div>`).join("");
+            } else {
+                warnContainer.innerHTML = "";
+            }
+
+            // Table of recommended purchase items
+            const tbody = document.getElementById("resItemsTable");
+            if (opt.items && opt.items.length > 0) {
+                tbody.innerHTML = opt.items.map(it => `
+                    <tr style="border-bottom:1px solid #e0e0e0;">
+                        <td style="padding:10px; font-weight:600; color:#124726;">
+                            ${it.fertilizer}
+                            <div style="font-size:11px; color:#555;">${it.price_type}</div>
+                        </td>
+                        <td style="padding:10px; font-size:14px;"><b>${it.bags} Bags</b> (${it.total_kg} kg)</td>
+                        <td style="padding:10px; font-size:14px;">₹ ${it.unit_price.toFixed(2)}</td>
+                        <td style="padding:10px; font-size:14px; font-weight:700; color:#176b3a;">₹ ${it.cost.toFixed(2)}</td>
+                    </tr>
+                `).join("");
+            } else {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding:15px; text-align:center; color:#666;">No synthetic N-P-K additions needed. Soil nutrient levels meet crop targets.</td></tr>`;
+            }
+
+            // Nutrient Fulfillment Metrics
+            const metricsDiv = document.getElementById("fulfillmentMetrics");
+            const nutrients = [
+                { label: "Nitrogen (N)", req: data.requirements.n, soil: data.soil_available.n, gap: data.nutrient_gaps.n, sup: opt.supplied.n },
+                { label: "Phosphorus (P)", req: data.requirements.p, soil: data.soil_available.p, gap: data.nutrient_gaps.p, sup: opt.supplied.p },
+                { label: "Potassium (K)", req: data.requirements.k, soil: data.soil_available.k, gap: data.nutrient_gaps.k, sup: opt.supplied.k }
+            ];
+
+            metricsDiv.innerHTML = nutrients.map(nu => {
+                const totalAvailableWithPackage = nu.soil + nu.sup;
+                const percentMet = nu.req > 0 ? Math.min(100, Math.round((totalAvailableWithPackage / nu.req) * 100)) : 100;
+                return `
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;">
+                            <span>${nu.label}</span>
+                            <span style="color:#176b3a;">${totalAvailableWithPackage.toFixed(1)} / ${nu.req.toFixed(1)} kg (${percentMet}%)</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width:${percentMet}%;"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; color:#666; margin-top:2px;">
+                            <span>Soil Reserve: ${nu.soil.toFixed(1)} kg</span>
+                            <span>Deficit Gap: ${nu.gap.toFixed(1)} kg</span>
+                            <span>Delivered by Package: ${nu.sup.toFixed(1)} kg</span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            // All Strategies Comparison
+            const stratGrid = document.getElementById("strategiesGrid");
+            stratGrid.innerHTML = data.all_strategies.map(s => {
+                const isBest = s.id === opt.strategy_id;
+                return `
+                    <div class="strategy-card ${isBest ? 'best-strategy' : ''}">
+                        ${isBest ? '<div class="best-badge">⭐ Least Cost Optimum</div>' : ''}
+                        <h3 style="font-size:16px; color:#124726; margin:0 0 6px 0;">${s.name}</h3>
+                        <p style="font-size:12px; color:#5e7364; margin:0 0 12px 0;">${s.description}</p>
+                        <div style="font-size:22px; font-weight:700; color:#176b3a; margin-bottom:10px;">
+                            ₹ ${s.total_cost.toLocaleString('en-IN')}
+                        </div>
+                        <div style="font-size:12px; border-top:1px solid #e8e8e8; padding-top:8px;">
+                            <strong>Items in package:</strong>
+                            <ul style="padding-left:18px; margin:4px 0;">
+                                ${s.items.map(it => `<li>${it.bags} bags of ${it.fertilizer} (${it.total_kg} kg)</li>`).join("")}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            resDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to AgriSmart</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5faf3;
+            color: #203b29;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: white;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #23743a;
+        }
+
+        header a {
+            color: #23743a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 75px 8%;
+            background: linear-gradient(135deg, #e3f4df 0%, #c3e8ca 45%, #eaf8ed 100%);
+            text-align: center;
+        }
+
+        .content {
+            max-width: 780px;
+        }
+
+        .tag {
+            color: #23743a;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 13px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 6vw, 64px);
+            line-height: 1.12;
+            margin: 20px 0;
+        }
+
+        h1 span { color: #278348; }
+
+        .description {
+            color: #5b6f60;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary {
+            background: #23743a;
+            color: white;
+        }
+
+        .secondary {
+            border: 1px solid #23743a;
+            color: #23743a;
+            background: white;
+        }
+
+        .features {
+            padding: 45px 7%;
+            text-align: center;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .feature {
+            background: white;
+            padding: 25px 18px;
+            border-radius: 13px;
+            box-shadow: 0 4px 18px #203b2910;
+        }
+
+        .feature h3 { color: #23743a; }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            color: #68796b;
+            font-size: 14px;
+        }
+        
+/* AgriSmart welcome page polish */
+
+header {
+    box-shadow: 0 4px 18px rgba(25, 75, 40, 0.07);
+    border-bottom: 1px solid #e5eee5;
+}
+
+.logo {
+    letter-spacing: -0.5px;
+}
+
+.hero {
+    padding: 75px 8%;
+}
+
+.content {
+    max-width: 850px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 30px;
+    background: rgba(35, 116, 58, 0.09);
+}
+
+h1 {
+    letter-spacing: -1.2px;
+}
+
+.description {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn {
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(35, 116, 58, 0.13);
+}
+
+.feature {
+    border: 1px solid #e6eee5;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.feature:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(35, 116, 58, 0.09);
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 16px 5%;
+    }
+
+    .hero {
+        padding: 48px 6%;
+    }
+
+    .description {
+        font-size: 16px;
+    }
+}
+
+/* Premium AgriSmart welcome feature cards */
+
+.features {
+    padding: 65px 7%;
+    background: #f7fbf6;
+}
+
+.features h2 {
+    color: #1d6035;
+    font-size: clamp(24px, 3vw, 34px);
+    margin-bottom: 12px;
+}
+
+.feature-grid {
+    gap: 24px;
+    margin-top: 35px;
+}
+
+.feature {
+    background: #ffffff;
+    border: 1px solid #e0ece1;
+    border-radius: 18px;
+    padding: 30px 24px;
+    box-shadow: 0 6px 22px rgba(25, 75, 40, 0.06);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(25, 75, 40, 0.12);
+}
+
+.feature h3 {
+    color: #23743a;
+    margin-bottom: 12px;
+}
+
+.feature p {
+    color: #5b6f60;
+    line-height: 1.8;
+}
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">🌱 AgriSmart</div>
+        <a href="/login">Farmer Login</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="content">
+                <div class="tag">SMART FARMING • SMART FUTURE</div>
+
+                <h1>Grow Smarter with <span>AgriSmart</span></h1>
+
+                <p class="description">
+                    An intelligent fertilizer recommendation system that helps
+                    farmers understand their soil, choose suitable fertilizers,
+                    manage costs, and make smarter farming decisions.
+                </p>
+
+                <div class="buttons">
+                    <a class="btn primary" href="/entry">
+                        Get Started →
+                    </a>
+
+                    <a class="btn secondary" href="/entry">
+                        Explore AgriSmart
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2>Everything You Need for Smarter Farming</h2>
+
+            <div class="feature-grid">
+                <div class="feature">
+                    <h3>🌾 Fertilizer Recommendations</h3>
+                    <p>Get suggestions based on crop and soil information.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>💰 Cost Optimization</h3>
+                    <p>Explore fertilizer options that suit your budget.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>🌱 Soil Health</h3>
+                    <p>Understand soil conditions and nutrient levels.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>🤖 AI Farming Assistant</h3>
+                    <p>Explore helpful answers to farming questions.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        AgriSmart — Fertilizer Optimization Recommender
+        <br>
+        An academic project for smarter and more sustainable farming.
+    </footer>
+</body>
+</html>

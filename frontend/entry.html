@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started | AgriSmart</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --green: #176b3a;
+    --dark: #123d29;
+    --light: #edf7ed;
+    --text: #193d2b;
+    --muted: #64766a;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, #edf7ed, #ffffff 55%, #dcefdc);
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 6%;
+}
+
+.logo {
+    color: var(--dark);
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #2b914d;
+}
+
+.top-link {
+    color: var(--green);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.layout {
+    max-width: 1200px;
+    min-height: 78vh;
+    margin: 12px auto 45px;
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    align-items: center;
+    gap: 55px;
+}
+
+.intro {
+    padding: 30px 0;
+}
+
+.eyebrow {
+    display: inline-block;
+    background: #dcefdc;
+    color: var(--green);
+    border-radius: 30px;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+h1 {
+    margin: 24px 0 18px;
+    font-size: clamp(38px, 4.5vw, 59px);
+    line-height: 1.12;
+    letter-spacing: -2px;
+}
+
+h1 span {
+    color: #278747;
+}
+
+.description {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.85;
+}
+
+.benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 32px;
+}
+
+.benefit {
+    background: rgba(255,255,255,0.75);
+    border: 1px solid #e0ece0;
+    border-radius: 15px;
+    padding: 17px 12px;
+}
+
+.benefit-icon {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.benefit strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.panel {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid #e1ece1;
+    border-radius: 28px;
+    padding: 36px;
+    box-shadow: 0 24px 65px rgba(23, 75, 40, 0.12);
+}
+
+.plant {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 18px;
+    border-radius: 22px;
+    background: #e7f5e6;
+    font-size: 36px;
+}
+
+.panel h2 {
+    text-align: center;
+    font-size: 29px;
+    letter-spacing: -0.8px;
+}
+
+.panel-subtitle {
+    margin: 10px 0 28px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 14px;
+    padding: 17px;
+    border: 1px solid #e1ebe1;
+    border-radius: 16px;
+    color: var(--text);
+    text-decoration: none;
+    background: white;
+    transition: 0.2s ease;
+}
+
+.option:hover {
+    transform: translateY(-3px);
+    border-color: #8ac69a;
+    box-shadow: 0 10px 24px rgba(23, 75, 40, 0.09);
+}
+
+.option.primary {
+    background: linear-gradient(135deg, #176b3a, #23864b);
+    color: white;
+    border-color: transparent;
+}
+
+.option-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #eaf5e9;
+    font-size: 23px;
+}
+
+.primary .option-icon {
+    background: rgba(255,255,255,0.16);
+}
+
+.option-copy {
+    flex: 1;
+}
+
+.option-copy strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.option-copy small {
+    display: block;
+    font-size: 13px;
+    opacity: 0.82;
+    line-height: 1.5;
+}
+
+.arrow {
+    font-size: 23px;
+}
+
+.panel-footer {
+    margin-top: 26px;
+    text-align: center;
+    color: #748578;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    color: #78877c;
+    font-size: 12px;
+}
+
+@media (max-width: 850px) {
+    .layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 580px;
+        margin-top: 0;
+    }
+
+    .intro {
+        padding: 20px 0 0;
+    }
+
+    h1 {
+        font-size: 42px;
+    }
+
+    .panel {
+        padding: 28px 22px;
+    }
+}
+
+@media (max-width: 420px) {
+    .topbar {
+        padding: 18px 5%;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .layout {
+        padding: 12px 16px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    .benefits {
+        gap: 8px;
+    }
+
+    .benefit {
+        padding: 13px 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a class="logo" href="/welcome" style="text-decoration:none">
+        🌱 Agri<span>Smart</span>
+    </a>
+    <a class="top-link" href="/welcome">← Back to Welcome</a>
+</header>
+
+<main class="layout">
+
+    <section class="intro">
+        <div class="eyebrow">🌿 SMART FARMING · SMART FUTURE</div>
+
+        <h1>
+            Empowering Farmers with
+            <span>Smarter Decisions.</span>
+        </h1>
+
+        <p class="description">
+            Make better farming decisions with AgriSmart.
+            Explore fertilizer recommendations, understand soil
+            health, optimize costs, and discover data-driven
+            insights for more productive farming.
+        </p>
+
+        <div class="benefits">
+            <div class="benefit">
+                <div class="benefit-icon">🌾</div>
+                <strong>Better Crop Yield</strong>
+            </div>
+
+            <div class="benefit">
+                <div class="benefit-icon">💰</div>
+                <strong>Cost Optimization</strong>
+            </div>
+
+            <div class="benefit">
+                <div class="benefit-icon">🌱</div>
+                <strong>Sustainable Farming</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="plant">🌱</div>
+
+        <h2>Welcome to AgriSmart</h2>
+        <p class="panel-subtitle">
+            Choose how you'd like to continue.
+        </p>
+
+        <a class="option primary" href="/login">
+            <span class="option-icon">👤</span>
+            <span class="option-copy">
+                <strong>Login</strong>
+                <small>Access your farmer account</small>
+            </span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a class="option" href="/signup">
+            <span class="option-icon">👥</span>
+            <span class="option-copy">
+                <strong>Create Account</strong>
+                <small>Join AgriSmart today</small>
+            </span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a class="option" href="/app">
+            <span class="option-icon">🍃</span>
+            <span class="option-copy">
+                <strong>Continue as Guest</strong>
+                <small>Explore without signing in</small>
+            </span>
+            <span class="arrow">→</span>
+        </a>
+
+        <div class="panel-footer">
+            SMART FARMING · BETTER TOMORROW
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    AgriSmart · Fertilizer Optimization Recommender · Academic Project
+</footer>
+
+</body>
+</html>

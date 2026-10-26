@@ -1,0 +1,16 @@
+# AgriSmart - Fertilizer Optimization & Recommendation System
+# Core Project Dependencies
+
+# Web Backend Framework & CORS
+flask>=3.0.0
+flask-cors>=5.0.0
+
+# Machine Learning & Scientific Computing
+scikit-learn>=1.4.0
+pandas>=2.0.0
+numpy>=1.26.0
+joblib>=1.3.0
+
+# Interactive Dashboard (Alternative GUI)
+streamlit>=1.30.0
+gunicorn

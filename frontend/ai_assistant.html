@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Farming Assistant | AgriSmart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .assistant-container {
+            max-width: 900px;
+            margin: 20px auto 40px auto;
+            padding: 0 15px;
+        }
+
+        .assistant-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .assistant-header h1 {
+            font-size: 32px;
+            color: #174d25;
+            margin-bottom: 8px;
+        }
+
+        .assistant-header p {
+            color: #4a6b52;
+            font-size: 16px;
+        }
+
+        .assistant-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #d8eadb;
+        }
+
+        .robot-avatar {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .chat-box {
+            min-height: 320px;
+            max-height: 480px;
+            overflow-y: auto;
+            border: 1.5px solid #c8decb;
+            border-radius: 12px;
+            padding: 20px;
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin: 12px 0;
+            max-width: 85%;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .bot {
+            background: #f4faf5;
+            color: #1a2e1d;
+            border: 1.5px solid #b7dfbf;
+            margin-right: auto;
+        }
+
+        .bot b, .bot strong {
+            color: #0e4b26;
+            font-weight: 800;
+        }
+
+        .user {
+            background: #1e6930;
+            color: #ffffff;
+            margin-left: auto;
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        #question {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1.5px solid #9dc3a3;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #111111;
+            background-color: #ffffff;
+            outline: none;
+        }
+        #question::placeholder {
+            color: #555555;
+            opacity: 1;
+        }
+        #question:focus {
+            border-color: #1e6930;
+            box-shadow: 0 0 0 3px rgba(30, 105, 48, 0.2);
+        }
+
+        .ask-btn {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+        .ask-btn:hover {
+            background: #1e5822;
+        }
+
+        .voice-btn {
+            background: #1565c0;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            min-width: 140px;
+            transition: background 0.2s;
+        }
+        .voice-btn:hover {
+            background: #0d47a1;
+        }
+
+        .voice-btn.listening {
+            background: #c62828;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.75; }
+            100% { opacity: 1; }
+        }
+
+        .quick-section {
+            margin-top: 15px;
+            border-top: 1px dashed #dbe9dd;
+            padding-top: 15px;
+        }
+
+        .quick-section h3 {
+            font-size: 15px;
+            color: #174d25;
+            margin-bottom: 10px;
+        }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-btn {
+            background: #f0f8f1;
+            color: #245c2a;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .quick-btn:hover {
+            background: #2e7d32;
+            color: #fff;
+            border-color: #2e7d32;
+        }
+
+        .status-bar {
+            text-align: center;
+            min-height: 22px;
+            color: #1565c0;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        @media(max-width: 650px) {
+            .controls {
+                flex-direction: column;
+            }
+            .message {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            🌱 Agri<span>Smart</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/recommend" class="nav-link">🌱 Recommender</a>
+            <a href="/cost-optimizer" class="nav-link">💰 Cost Optimizer</a>
+            <a href="/explainability" class="nav-link">🔍 Explainable AI</a>
+            <a href="/ai-assistant" class="nav-link active">🤖 AI Assistant</a>
+            <a href="/marketplace" class="nav-link">🛒 Marketplace</a>
+            <a href="/soil-card" class="nav-link">📄 Soil Card</a>
+        </div>
+    </nav>
+
+    <div class="assistant-container">
+
+        <div class="assistant-header">
+            <div class="robot-avatar">🤖</div>
+            <h1>AI Agronomy Assistant</h1>
+            <p>Voice and text decision-support for soil testing, crop nutrition, and fertilizer best practices.</p>
+        </div>
+
+        <div class="assistant-card">
+
+            <div id="chatBox" class="chat-box">
+                <div class="message bot">
+                    👋 <b>Namaste / Hello!</b> I am your AgriSmart AI Farming Assistant.
+                    <br><br>
+                    Ask me questions about <b>fertilizer types, N-P-K nutrient balance, soil pH, irrigation timing, and crop-specific dosages</b>. You can type or tap the microphone to speak!
+                </div>
+            </div>
+
+            <div id="status" class="status-bar"></div>
+
+            <div class="controls">
+                <input
+                    type="text"
+                    id="question"
+                    placeholder="Ask something like: Which fertilizer is good for wheat?"
+                >
+
+                <button class="ask-btn" onclick="askAI()">
+                    Ask Assistant
+                </button>
+
+                <button
+                    id="voiceButton"
+                    class="voice-btn"
+                    onclick="startVoiceAssistant()">
+                    🎤 Speak
+                </button>
+            </div>
+
+            <div class="quick-section">
+                <h3>💡 Quick Common Questions</h3>
+                <div class="quick-buttons">
+                    <button class="quick-btn" onclick="quickQuestion('Which fertilizer is good for wheat?')">
+                        🌾 Fertilizer for Wheat
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('What is the importance of nitrogen?')">
+                        🌱 Nitrogen (N) Role
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('What is the importance of phosphorus?')">
+                        🌿 Phosphorus (P) Role
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('What should be the ideal soil pH?')">
+                        🧪 Soil pH Guide
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('How can I improve soil health?')">
+                        🍂 Organic Carbon & Soil
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('When should I apply DAP?')">
+                        ⏳ When to Apply DAP
+                    </button>
+                    <button class="quick-btn" onclick="quickQuestion('How to cure Zinc deficiency in rice?')">
+                        🌾 Zinc for Paddy
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const questionInput = document.getElementById("question");
+        const chatBox = document.getElementById("chatBox");
+        const statusText = document.getElementById("status");
+        const voiceButton = document.getElementById("voiceButton");
+
+        function addMessage(text, type) {
+            const message = document.createElement("div");
+            message.className = "message " + type;
+            message.innerHTML = text;
+            chatBox.appendChild(message);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function quickQuestion(question) {
+            questionInput.value = question;
+            askAI();
+        }
+
+        function getFarmingAnswerLocal(q) {
+            const lower = q.toLowerCase();
+            if (lower.includes("wheat")) {
+                return `🌾 <b>Wheat Fertilizer Advisory:</b><br>
+                Wheat requires balanced macro-nutrients: 120 kg N, 60 kg P2O5, and 40 kg K2O per hectare.<br>
+                • <b>Basal dose at sowing:</b> Apply all P & K (e.g. via DAP or NPK complex) + 1/3 Nitrogen.<br>
+                • <b>Top dressings:</b> Remaining Nitrogen (Urea) split at Crown Root Initiation (CRI) stage (~21 days) and flowering stage.`;
+            }
+            if (lower.includes("nitrogen") || lower.includes(" n ")) {
+                return `🌱 <b>Nitrogen (N) Function:</b><br>
+                Nitrogen is the primary driver of vegetative leaf and stem growth, protein synthesis, and chlorophyll production. Deficiency results in pale yellowing of older leaves.`;
+            }
+            if (lower.includes("phosphorus") || lower.includes(" p ")) {
+                return `🌿 <b>Phosphorus (P) Function:</b><br>
+                Phosphorus stimulates early root elongation, tillering, seed formation, and energy transfer (ATP). Essential as a basal application during sowing.`;
+            }
+            if (lower.includes("potassium") || lower.includes(" k ")) {
+                return `🧪 <b>Potassium (K) Function:</b><br>
+                Potassium regulates stomatal water loss, enzyme activation, disease resistance, and grain weight. Applied via MOP (60% K2O).`;
+            }
+            if (lower.includes("ph") || lower.includes("acid") || lower.includes("alkaline")) {
+                return `🧪 <b>Soil Reaction (pH):</b><br>
+                Most field crops thrive in a slightly acidic to neutral range (pH 6.0 to 7.5).<br>
+                • <b>Acidic soils (pH < 5.5):</b> Add agricultural lime (CaCO3).<br>
+                • <b>Alkaline/Sodic soils (pH > 8.0):</b> Apply gypsum (CaSO4·2H2O) and organic compost.`;
+            }
+            if (lower.includes("dap")) {
+                return `⏳ <b>DAP (18:46:0) Application Timing:</b><br>
+                DAP is water-soluble phosphorus. It must always be placed 3-5 cm below and beside the seed as a <b>basal application</b> at sowing. Never broadcast DAP on the soil surface as phosphorus is immobile.`;
+            }
+            if (lower.includes("zinc") || lower.includes("khaira")) {
+                return `🌾 <b>Zinc Deficiency Advisory:</b><br>
+                Commonly causes Khaira disease in paddy (rusty brown spots on leaves). Apply 25 kg/ha of Zinc Sulphate (ZnSO4 21%) into the soil during puddling, or foliar spray at 0.5% ZnSO4 with 0.25% lime.`;
+            }
+            if (lower.includes("soil health") || lower.includes("improve soil")) {
+                return `🍂 <b>Soil Health & Organic Matter:</b><br>
+                Incorporate 5-10 tonnes/ha of well-rotted Farm Yard Manure (FYM) or Vermicompost. Practice crop rotation with leguminous pulses to fix atmospheric nitrogen biologically.`;
+            }
+            return null;
+        }
+
+        async function askAI() {
+            const question = questionInput.value.trim();
+            if (!question) {
+                statusText.innerText = "Please type or speak a question.";
+                return;
+            }
+
+            addMessage(escapeHTML(question), "user");
+            questionInput.value = "";
+            statusText.innerText = "Consulting agronomy knowledge base...";
+
+            // Check fast client-side knowledge
+            const localAnswer = getFarmingAnswerLocal(question);
+            if (localAnswer) {
+                setTimeout(() => {
+                    statusText.innerText = "";
+                    addMessage(localAnswer, "bot");
+                    speakAnswer(localAnswer);
+                }, 300);
+                return;
+            }
+
+            // Fallback to backend agronomy engine
+            try {
+                const res = await fetch("/api/ai-assistant", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: question })
+                });
+                const data = await res.json();
+                statusText.innerText = "";
+                const reply = (data.success && data.answer) ? data.answer.replace(/\n/g, "<br>") : "I could not find an exact match. Please ask about fertilizers (Urea, DAP, MOP), soil nutrients (N, P, K, pH), or crops (Wheat, Rice, Cotton).";
+                addMessage(reply, "bot");
+                speakAnswer(reply);
+            } catch (err) {
+                statusText.innerText = "";
+                const fallback = "🌱 <b>Agronomy Guide:</b> Recommended fertilizer management requires balanced N-P-K according to soil test values. Ensure basal placement for phosphorus and split top-dressing for nitrogen.";
+                addMessage(fallback, "bot");
+                speakAnswer(fallback);
+            }
+        }
+
+        function speakAnswer(htmlText) {
+            if (!("speechSynthesis" in window)) return;
+            const cleanText = htmlText.replace(/<[^>]*>/g, " ");
+            const speech = new SpeechSynthesisUtterance(cleanText);
+            speech.lang = "en-IN";
+            speech.rate = 0.95;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(speech);
+        }
+
+        function startVoiceAssistant() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Voice recognition is supported in Google Chrome and Microsoft Edge.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = "en-IN";
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            voiceButton.classList.add("listening");
+            voiceButton.innerText = "🔴 Listening...";
+            statusText.innerText = "🎤 Speak your farming question now...";
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                questionInput.value = transcript;
+                statusText.innerText = 'Recognized: "' + transcript + '"';
+                voiceButton.classList.remove("listening");
+                voiceButton.innerText = "🎤 Speak";
+                askAI();
+            };
+
+            recognition.onerror = function(event) {
+                statusText.innerText = "Could not hear audio clearly. Please try again or type.";
+                voiceButton.classList.remove("listening");
+                voiceButton.innerText = "🎤 Speak";
+            };
+
+            recognition.onend = function() {
+                voiceButton.classList.remove("listening");
+                voiceButton.innerText = "🎤 Speak";
+            };
+        }
+
+        questionInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") askAI();
+        });
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
+    </script>
+</body>
+</html>
