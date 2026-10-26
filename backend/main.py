@@ -9,9 +9,8 @@ import math
 import sys
 import os
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "database"))
-
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 from database.database import (
     create_user,
     authenticate_user,
